@@ -5,7 +5,7 @@
 ## Description
 
 A measurement system based on channel sounding technique,
-which will enable accurate and comprehensive measurements of propagation characteristics under conditions conditions associated with IIoT and 5G technologies. 
+which will enable accurate and comprehensive measurements of propagation characteristics under conditions associated with IIoT and 5G technologies. 
 
 
 Channel sounding - a technique for evaluating radio environment for wireless communications, especially multi-antenna systems
