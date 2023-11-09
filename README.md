@@ -18,4 +18,4 @@ They will also provide control of measurement exectuion and data visualization.
 
 ## Communictaion 
 
-The system will be controlled from a remote computer connected to the SBC via SSH protocol. Measuring devices will be controlled via Ethernet.
+System will be controlled from a remote computer connected to the SBC via SSH protocol. Measuring devices will be controlled via Ethernet.
