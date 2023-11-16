@@ -1,0 +1,8 @@
+{
+    "IP_ADDRESS_ANALYZER" : "192.168.0.20",
+    "IP_ADDRESS_GENERATOR" : "192.168.0.30",
+    "PORT" : 5025,
+    "CONNECTION_TYPE" : "SOCKET",
+    "TRACE_FILE": "Trace_file.csv",
+    "MEASURE_TIME" : 10
+}
