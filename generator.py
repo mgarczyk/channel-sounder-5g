@@ -24,9 +24,9 @@ def com_check():
     generator.repcap_hwInstance_set(repcap.HwInstance.InstA)
 
 
-def meas_prep(set : True, amplitude : int, freq : int):
+def meas_prep(set : True, mode : enums.FreqMode, amplitude : int, freq : int):
     generator.output.state.set_value(set)
-    generator.source.frequency.set_mode(enums.FreqMode.CW)
+    generator.source.frequency.set_mode(mode)
     generator.source.power.level.immediate.set_amplitude(amplitude)
     generator.source.frequency.fixed.set_value(freq)
     print(f'Channel 1 PEP level: {generator.source.power.get_pep()} dBm')
@@ -41,6 +41,6 @@ def direct_SCPI():
 
 if __name__ == "__main__":
     com_check()
-    meas_prep(True, -20, 23E9)
+    meas_prep(True, enums.FreqMode.CW, -20, 23E9)
     direct_SCPI()
     exit()
