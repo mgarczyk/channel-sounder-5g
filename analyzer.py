@@ -6,12 +6,12 @@ try:
     with open ("config.json") as config_f:
         config = json.load(config_f)
         IP_ADDRESS_ANALYZER = config["IP_ADDRESS_ANALYZER"]
-        PORT = config["PORT"]
+        PORT_ANALYZER = config["PORT_ANALYZER"]
         CONNECTION_TYPE = config["CONNECTION_TYPE"]
         TRACE_FILE = config["TRACE_FILE"] 
         MEASURE_TIME = config["MEASURE_TIME"]
-        resource = f'TCPIP::{IP_ADDRESS_ANALYZER}::{PORT}::{CONNECTION_TYPE}'  # Resource string for the device
-        instrument = RsInstrument(resource, True, True, "SelectVisa='socket'")   
+        resource = f'TCPIP::{IP_ADDRESS_ANALYZER}::{PORT_ANALYZER}::{CONNECTION_TYPE}'  # Resource string for the device
+        analyzer = RsInstrument(resource, True, True, "SelectVisa='socket'")   
         config_f.close()
 except FileNotFoundError:
     print("Brak pliku konfiguracyjnego.")
@@ -33,47 +33,47 @@ except FileNotFoundError:
 def com_prep():
     """Preparation of the communication (termination, timeout, etc...)"""
     
-    print(f'VISA Manufacturer: {instrument.visa_manufacturer}')  # Confirm VISA package to be chosen
-    instrument.visa_timeout = 5000  # Timeout in ms for VISA Read Operations
-    instrument.opc_timeout = 3000  # Timeout in ms for opc-synchronised operations
-    instrument.instrument_status_checking = True  # Error check after each command
-    instrument.clear_status()  # Clear status register
+    print(f'VISA Manufacturer: {analyzer.visa_manufacturer}')  # Confirm VISA package to be chosen
+    analyzer.visa_timeout = 5000  # Timeout in ms for VISA Read Operations
+    analyzer.opc_timeout = 3000  # Timeout in ms for opc-synchronised operations
+    analyzer.instrument_status_checking = True  # Error check after each command
+    analyzer.clear_status()  # Clear status register
   
     
 def close():
     """Close the VISA session"""
-    instrument.close()
+    analyzer.close()
 
 
 def com_check():
     """Check communication with the device by requesting it's ID"""
-    idn_response = instrument.query_str('*IDN?')
+    idn_response = analyzer.query_str('*IDN?')
     print('Hello, I am ' + idn_response)
     
    
-def meas_prep(freq : str, span : str, mode : str):
-    instrument.write_str_with_opc(f'FREQuency:CENTer {freq}')  
-    instrument.write_str_with_opc(f'FREQuency:SPAN {span}')  
-    instrument.write_str_with_opc(f'DISPlay:TRACe1:MODE {mode}')  # Trace to Max Hold
+def meas_prep(freq : int, span : int, mode : str):
+    analyzer.write_str_with_opc(f'FREQuency:CENTer {freq}')  
+    analyzer.write_str_with_opc(f'FREQuency:SPAN {span}')  
+    analyzer.write_str_with_opc(f'DISPlay:TRACe1:MODE {mode}')  # Trace to Max Hold
 
 
 def trace_get():
     """Initialize continuous measurement, stop it after the desired time, query trace data"""
-    instrument.write_str_with_opc('INITiate:CONTinuous ON')  # Continuous measurement on trace 1 ON
+    analyzer.write_str_with_opc('INITiate:CONTinuous ON')  # Continuous measurement on trace 1 ON
     print('Please wait for maxima to be found...')
     sleep(int(MEASURE_TIME))  # Wait for preset record time
-    instrument.write('DISPlay:TRACe1:MODE VIEW')  # Set trace to view mode / stop collecting data
-    instrument.query_opc()
+    analyzer.write('DISPlay:TRACe1:MODE VIEW')  # Set trace to view mode / stop collecting data
+    analyzer.query_opc()
     sleep(0.5)
 
     # Get y data (amplitude for each point)
-    trace_data = instrument.query('Trace:DATA? TRACe1')  # Read y data of trace 1
+    trace_data = analyzer.query('Trace:DATA? TRACe1')  # Read y data of trace 1
     csv_trace_data = trace_data.split(",")  # Slice the amplitude list
     trace_len = len(csv_trace_data)  # Get number of elements of this list
 
-    # Reconstruct x data (frequency for each point) as it can not be directly read from the instrument
-    start_freq = instrument.query_float('FREQuency:STARt?')
-    span = instrument.query_float('FREQuency:SPAN?')
+    # Reconstruct x data (frequency for each point) as it can not be directly read from the analyzer
+    start_freq = analyzer.query_float('FREQuency:STARt?')
+    span = analyzer.query_float('FREQuency:SPAN?')
     step_size = span / (trace_len-1)
 
     # Now write values into file
@@ -95,7 +95,7 @@ def trace_get():
 if __name__ == "__main__":
     com_prep()
     com_check()
-    meas_prep("20e9", "1e6", "MAXHold ")
+    meas_prep(20E9, 1E6, "MAXHold ")
     trace_get()
     close()
     print('Program successfully ended.')
