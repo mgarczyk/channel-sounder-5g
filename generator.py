@@ -30,17 +30,12 @@ def meas_prep(set : True, mode : enums.FreqMode, amplitude : int, freq : int):
     generator.source.power.level.immediate.set_amplitude(amplitude)
     generator.source.frequency.fixed.set_value(freq)
     print(f'Channel 1 PEP level: {generator.source.power.get_pep()} dBm')
-
-
-def direct_SCPI():
     # Direct SCPI interface:
     response = generator.utilities.query_str('*IDN?')
     print(f'Direct SCPI response on *IDN?: {response}')
     generator.close()
 
-
 if __name__ == "__main__":
     com_check()
     meas_prep(True, enums.FreqMode.CW, -20, 23E9)
-    direct_SCPI()
     exit()
