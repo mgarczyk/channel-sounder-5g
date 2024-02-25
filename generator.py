@@ -18,24 +18,21 @@ except FileNotFoundError:
     exit()
 
 def com_check():
-    # Driver's instrument status checking ( SYST:ERR? ) after each command (default value is True):
     generator.utilities.instrument_status_checking = True
-    # The generator object uses the global HW instance one - RF out A
     generator.repcap_hwInstance_set(repcap.HwInstance.InstA)
 
 
-def meas_prep(set : True, mode : enums.FreqMode, amplitude : int, freq : int):
+def meas_prep(set : True, mode, amplitude : int, freq : int):
     generator.output.state.set_value(set)
     generator.source.frequency.set_mode(mode)
     generator.source.power.level.immediate.set_amplitude(amplitude)
     generator.source.frequency.fixed.set_value(freq)
     print(f'Channel 1 PEP level: {generator.source.power.get_pep()} dBm')
-    # Direct SCPI interface:
     response = generator.utilities.query_str('*IDN?')
     print(f'Direct SCPI response on *IDN?: {response}')
     generator.close()
 
 if __name__ == "__main__":
     com_check()
-    meas_prep(True, enums.FreqMode.CW, -20, 23E9)
+    meas_prep(True, enums.FreqMode.CW, -10, 28E9)
     exit()

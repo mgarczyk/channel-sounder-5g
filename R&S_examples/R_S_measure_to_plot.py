@@ -1,4 +1,4 @@
-# GitHub examples repository path: SpectrumAnalyzers/Python/RsInstrument
+# GitHubb examples repository path: SpectrumAnalyzers/Python/RsInstrument
 # Example for FSW / FSV / FSVA / FPS Spectrum Analyzers
 # Example for FSW showing binary IQ data read from the instrument and displayed as power spectrum
 # Preconditions:
@@ -12,7 +12,7 @@ from RsInstrument import *  # The RsInstrument package is hosted on pypi.org, se
 
 # Variables
 IP = '192.168.0.20'  # Analyzer IP address
-fs = 1e5			  # Sample rate (Hz)
+fs = 1e5			  # Sample ratffe (Hz)
 ct = 1e-3			  # Capture time (sec)
 freq = 20e9		  # Center frequency (Hz)
 RefLev = -90		  # Reference level (dBm)
