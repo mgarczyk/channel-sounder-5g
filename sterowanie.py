@@ -165,26 +165,25 @@ def step_right():
     time.sleep(0.006)
 
 def pomiar():
+    # Krok bazowo jest ustawionu na 1.8 stopnia, przy rozdzielczosci np. 1/16 daje to 0.1125 stopnia na krok
     DIR_EL_GPIO.write(True) #dol
-    kroki_el_pom(15) #zjazd o i stopni w dol - punkt poczatkowy pomiaru
+    kroki_el_pom(15) #zjazd o i kroków w dol - punkt poczatkowy pomiaru
     
-    for i in range(20):
-        for x in range(7):
-            az_angle=i*18
-            el_angle=-27+9*x
-            #analyzer.meas_prep(28E9, 100E3, "MAXHold ", -30, "500 Hz")
-            #analyzer.trace_get(az_angle,el_angle)
+    for i in range(20): # ile pomiarów w azymucie
+        for x in range(7): # ile pomiarów w elewacji
+            az_angle=i*18 # aktualny kąt azymutu (tylko informacyjnie (zaczynając od 0))
+            el_angle=-27+9*x #aktualny kąt elewacji (tylko informacyjnie (zaczynając od -27))
+            #analyzer.meas_prep(28E9, 100E3, "MAXHold ", -30, "500 Hz") # ustawienie pomiaru analizatorem
+            #analyzer.trace_get(az_angle,el_angle) # pomiar
             time.sleep(0.1)
-            elew_step(5) #TODO o ile krokow w gore - 9 stopni
-            
-        kroki_wstecz_el(35) #TODO o ile krokow wraca 7*5=35
-        azimut_step(10) # krok w azymucie o 18 stopni
-
+            elew_step(5) #przesunięcie o 5 kroków w elewacji
+        kroki_wstecz_el(35) #powrót elewacji do pozycji startowej
+        azimut_step(10) #przesunięcie o 10 kroków w azymucie
     time.sleep(1)
-    kroki_wstecz_az() #powrot o 360 stopni w azymucie
+    kroki_wstecz_az() # powrot o 360 stopni w azymucie
 
     DIR_EL_GPIO.write(False) #dol
-    kroki_el_pom(15) #powrot o i stopni w gore
+    kroki_el_pom(15) #powrot o kroków gore
 
         
 ######## TK_INTER_KLAWIATURA ###############
